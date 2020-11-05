@@ -3,38 +3,20 @@ const fs = require("fs");
 const PDFDocument = require("pdfkit");
 const path = require("path");
 
-let targetFolder="";
+let targetFolders = [];
 document.getElementById("selectButton").addEventListener("click",
-function(){
-  let folderPath = dialog.showOpenDialogSync({
-          properties: ["openDirectory"]
-        })[0];
-   targetFolder=folderPath;
-   document.getElementById("folderText").innerHTML="<span>Folder:</span>"+folderPath;
-});
-
-document.getElementById("convertButton").addEventListener("click",
-function() {
-    let filterdFiles = [];
-    let names = fs.readdirSync(targetFolder);
-    for (let i = 0; i < names.length; i++) {
-        if (getFileType(names[i]) == "png" || getFileType(names[i]) == "jpg") {
-            filterdFiles.push(targetFolder + "/" + names[i]);
-        }
-    }
-    filterdFiles.sort(function(a, b) {
-        return a.localeCompare(b, undefined, {
-            numeric: true,
-            sensitivity: 'base'
+    function () {
+        targetFolders = dialog.showOpenDialogSync({
+            properties: ["openDirectory", "multiSelections"]
         });
     });
 
-
-    const filename = path.basename(targetFolder) + ".pdf";
-    const outputPath = path.join(targetFolder, filename);
-    convert(filterdFiles,outputPath);
-
-});
+document.getElementById("convertButton").addEventListener("click",
+    function () {
+        for(const folder of targetFolders.values()){
+            dealWithSingleFolder(folder);
+        }
+    });
 
 function getFileType(fileName) {
     let startIndex = fileName.lastIndexOf(".");
@@ -42,19 +24,40 @@ function getFileType(fileName) {
     else return "";
 }
 
-function convert(imagesList,outputPath){
+function convert(imagesList, outputPath) {
     const doc = new PDFDocument();
     const imageConfig = {
         fit: [doc.page.width, doc.page.height],
         align: "center",
         valign: "center"
     };
-    doc.pipe(fs.createWriteStream(outputPath)).on("finish", function() {
-         alert("success");
-        });
+    doc.pipe(fs.createWriteStream(outputPath)).on("finish", function () {
+        alert("success");
+    });
     doc.image(imagesList[0], 0, 0, imageConfig);
     for (let i = 1; i < imagesList.length; i++) {
         doc.addPage().image(imagesList[i], 0, 0, imageConfig);
     }
     doc.end();
+}
+
+function dealWithSingleFolder(targetFolder){
+    let filterdFiles = [];
+    let names = fs.readdirSync(targetFolder);
+    for (let i = 0; i < names.length; i++) {
+        if (getFileType(names[i]) == "png" || getFileType(names[i]) == "jpg") {
+            filterdFiles.push(targetFolder + "/" + names[i]);
+        }
+    }
+    filterdFiles.sort(function (a, b) {
+        return a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+        });
+    });
+
+    const filename = path.basename(targetFolder) + ".pdf";
+    const outputPath = path.join(path.resolve(targetFolder,'..'), filename);
+    console.log(outputPath);
+    convert(filterdFiles, outputPath);
 }
