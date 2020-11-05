@@ -26,6 +26,7 @@ function convert(imagesList, outputPath) {
     if (imagesList.length == 0) {
         console.log(outputPath);
         dealWithSingleFolder();
+        return;
     }
     const doc = new PDFDocument();
     const imageConfig = {
