@@ -25,6 +25,9 @@ function getFileType(fileName) {
 }
 
 function convert(imagesList, outputPath) {
+    if(imagesList.length==0){
+        return;
+    }
     const doc = new PDFDocument();
     const imageConfig = {
         fit: [doc.page.width, doc.page.height],
