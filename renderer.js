@@ -24,6 +24,7 @@ function getFileType(fileName) {
 
 function convert(imagesList, outputPath) {
     if (imagesList.length == 0) {
+        console.log(outputPath);
         dealWithSingleFolder();
     }
     const doc = new PDFDocument();
