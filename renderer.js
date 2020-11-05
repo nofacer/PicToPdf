@@ -13,9 +13,10 @@ document.getElementById("selectButton").addEventListener("click",
 
 document.getElementById("convertButton").addEventListener("click",
     function () {
-        for(const folder of targetFolders.values()){
+        for (const folder of targetFolders.values()) {
             dealWithSingleFolder(folder);
         }
+        alert("done");
     });
 
 function getFileType(fileName) {
@@ -25,7 +26,7 @@ function getFileType(fileName) {
 }
 
 function convert(imagesList, outputPath) {
-    if(imagesList.length==0){
+    if (imagesList.length == 0) {
         return;
     }
     const doc = new PDFDocument();
@@ -35,7 +36,7 @@ function convert(imagesList, outputPath) {
         valign: "center"
     };
     doc.pipe(fs.createWriteStream(outputPath)).on("finish", function () {
-        alert("success");
+        console.log(outputPath + "-success");
     });
     doc.image(imagesList[0], 0, 0, imageConfig);
     for (let i = 1; i < imagesList.length; i++) {
@@ -44,7 +45,7 @@ function convert(imagesList, outputPath) {
     doc.end();
 }
 
-function dealWithSingleFolder(targetFolder){
+function dealWithSingleFolder(targetFolder) {
     let filterdFiles = [];
     let names = fs.readdirSync(targetFolder);
     for (let i = 0; i < names.length; i++) {
@@ -60,7 +61,7 @@ function dealWithSingleFolder(targetFolder){
     });
 
     const filename = path.basename(targetFolder) + ".pdf";
-    const outputPath = path.join(path.resolve(targetFolder,'..'), filename);
+    const outputPath = path.join(path.resolve(targetFolder, '..'), filename);
     console.log(outputPath);
     convert(filterdFiles, outputPath);
 }
