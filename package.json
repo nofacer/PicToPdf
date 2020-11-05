@@ -1,0 +1,18 @@
+{
+  "name": "administrative-lumber-hold-10brl",
+  "productName": "administrative-lumber-hold-10brl",
+  "description": "My Electron application description",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "xubinni",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "pdfkit": "*"
+  },
+  "devDependencies": {
+    "electron": "10.0.0-beta.21"
+  }
+}
