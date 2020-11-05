@@ -44,7 +44,9 @@ function convert(imagesList, outputPath) {
 }
 
 function dealWithSingleFolder() {
+    console.log(targetFolders);
     if (targetFolders.length == 0) {
+        alert('finish');
         return;
     }
     const currentFolder = targetFolders.pop();
