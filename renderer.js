@@ -24,7 +24,7 @@ function getFileType(fileName) {
 
 function convert(imagesList, outputPath) {
     if (imagesList.length == 0) {
-        return;
+        dealWithSingleFolder();
     }
     const doc = new PDFDocument();
     const imageConfig = {
@@ -44,7 +44,6 @@ function convert(imagesList, outputPath) {
 }
 
 function dealWithSingleFolder() {
-    console.log(targetFolders);
     if (targetFolders.length == 0) {
         alert('finish');
         return;
